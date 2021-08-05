@@ -1,30 +1,42 @@
+import { useState } from 'react';
+import images from './utils/images';
 import './App.scss';
 
 function App() {
+  const [carousel, setCarousel] = useState(0);
+  const length = images.length - 1;
+
+  const handleNext = () => {
+    setCarousel((carousel) => (carousel >= length ? 0 : carousel + 1));
+  };
+
+  const handlePrev = () => {
+    setCarousel((carousel) => (carousel <= 0 ? length : carousel - 1));
+  };
+
+  console.log({ carousel }, { length });
+
   return (
     <div className="App">
       <div className="carousel">
         <div className="image-container">
-          <img
-            src="https://images.unsplash.com/photo-1599394022918-6c2776530abb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1458&amp;q=80"
-            alt="first"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1500&amp;q=80"
-            alt="second"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1599423300746-b62533397364?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1500&amp;q=80"
-            alt="third"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1599561046251-bfb9465b4c44?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1492&amp;q=80"
-            alt="fourth"
-          />
+          {images.length > 0 &&
+            images.map((image) => (
+              <img
+                key={image.id}
+                src={image.url}
+                alt={image.alt}
+                style={{ transform: `translateX(-${carousel * 100}%)` }}
+              />
+            ))}
         </div>
         <div className="buttons-container">
-          <button className="btn left">Prev</button>
-          <button className="btn right">Next</button>
+          <button className="btn left" onClick={handlePrev}>
+            Prev
+          </button>
+          <button className="btn right" onClick={handleNext}>
+            Next
+          </button>
         </div>
       </div>
     </div>
