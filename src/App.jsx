@@ -1,20 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import images from './utils/images';
 import './App.scss';
 
 function App() {
   const [carousel, setCarousel] = useState(0);
+  const [intervalId, setIntervalId] = useState(0);
   const length = images.length - 1;
+  const time = 5000;
+  let interval;
+
+  useEffect(() => {
+    startInterval();
+
+    // eslint-disable-next-line
+  }, []);
+
+  const startInterval = () => {
+    interval = setInterval(() => {
+      setCarousel((carousel) => (carousel >= length ? 0 : carousel + 1));
+    }, time);
+
+    setIntervalId(interval);
+  };
+
+  const resetInterval = () => {
+    clearInterval(intervalId);
+    startInterval();
+  };
 
   const handleNext = () => {
     setCarousel((carousel) => (carousel >= length ? 0 : carousel + 1));
+    resetInterval();
   };
 
   const handlePrev = () => {
     setCarousel((carousel) => (carousel <= 0 ? length : carousel - 1));
+    resetInterval();
   };
-
-  console.log({ carousel }, { length });
 
   return (
     <div className="App">
